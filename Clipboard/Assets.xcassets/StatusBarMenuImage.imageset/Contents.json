@@ -1,0 +1,45 @@
+{
+  "images" : [
+    {
+      "idiom" : "mac",
+      "filename" : "mengbanhangkonghangtian-xingxingstar.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "mengbanhangkonghangtian-xingxingstar-2.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "mengbanhangkonghangtian-xingxingstar-1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "unassigned" : true,
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "mengbanhangkonghangtian-xingxingstar-3.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "unassigned" : true,
+      "scale" : "2x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  },
+  "properties" : {
+    "template-rendering-intent" : "original"
+  }
+}

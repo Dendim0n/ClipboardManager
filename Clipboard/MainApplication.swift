@@ -35,8 +35,8 @@ class MainApplication {
     func start() {
         if UserDefaults.standard.bool(forKey: showInStatusBar) {
             statusItem.button!.image = NSImage(named: "StatusBarMenuImage")
-//            statusItem.button!.image?.isTemplate = true
-//            statusItem.highlightMode = true
+            //            statusItem.button!.image?.isTemplate = true
+            //            statusItem.highlightMode = true
             statusItem.menu = topMenu
         }
         

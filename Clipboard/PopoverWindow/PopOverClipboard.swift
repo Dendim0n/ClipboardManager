@@ -10,13 +10,20 @@ import Cocoa
 import SnapKit
 import Carbon
 
+struct UISize {
+    static let height = 240
+    static let width = 360
+    static let searchFieldHeight = 48
+    static let scrollWidth = 180
+}
+
 class PopOverClipboard: NSPopover {
     override init() {
         super.init()
         self.contentViewController = ClipboardContentViewController()
         self.animates = true
-//        let appearance = NSAppearance(named: NSAppearance.Name.vibrantLight)
-//        appearance?.allowsVibrancy = true
+        //        let appearance = NSAppearance(named: NSAppearance.Name.vibrantLight)
+        //        appearance?.allowsVibrancy = true
         self.appearance = appearance
     }
     required init?(coder: NSCoder) {
@@ -36,17 +43,31 @@ class ClipboardContentViewController : NSViewController {
             let row = self.clipBoardHistoryTableView.selectedRow
             self.copy(content: self.dataSource[row])
         }
+        search.browseAction = {
+            if self.dataSource.count > 0 {
+                self.view.window?.makeFirstResponder(self.clipBoardHistoryTableView)
+                self.clipBoardHistoryTableView.selectRowIndexes(
+                    IndexSet(arrayLiteral: 0), byExtendingSelection: false)
+            }
+        }
         return search
     }()
     
-    lazy var clipBoardHistoryTableView: NSTableView = {
-        var tv = NSTableView()
+    lazy var clipBoardHistoryTableView: ClipBoardTableView = {
+        var tv = ClipBoardTableView()
         let column = NSTableColumn()
         tv.delegate = self
         tv.dataSource = self
         tv.headerView = nil
         tv.addTableColumn(column)
         tv.backgroundColor = .clear
+        tv.upArrowAction = {
+            self.view.window?.makeFirstResponder(self.searchField)
+        }
+        tv.resignAction = { event in
+            self.view.window?.makeFirstResponder(self.searchField)
+//            self.searchField.keyDown(with: event)
+        }
         tv.target = self
         tv.doubleAction = #selector(doubleClick)
         return tv
@@ -55,11 +76,55 @@ class ClipboardContentViewController : NSViewController {
     lazy var imgPreview: NSImageView = {
         let imgView = NSImageView(frame: NSRect.zero)
         imgView.imageAlignment = .alignCenter
+        imgView.wantsLayer = true
+        imgView.layer?.cornerRadius = 4
         return imgView
+    }()
+    
+    lazy var mainView:NSView = {
+        let view = NSView()
+        //background color?
+        //        view.wantsLayer = true
+        //        view.layer?.backgroundColor = NSColor.systemPink.cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.snp.makeConstraints { (make) in
+            make.width.equalTo(UISize.width)
+            make.height.equalTo(UISize.height)
+        }
+        view.addSubview(searchField)
+        view.addSubview(imgPreview)
+        view.addSubview(textPreview)
+        let scrollView = NSScrollView()
+        scrollView.backgroundColor = .clear
+        scrollView.drawsBackground = false
+        scrollView.hasVerticalScroller = true
+        scrollView.documentView = self.clipBoardHistoryTableView
+        view.addSubview(scrollView)
+        searchField.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(UISize.searchFieldHeight)
+        }
+        scrollView.snp.makeConstraints { (make) in
+            make.left.bottom.equalToSuperview()
+            make.width.equalTo(UISize.scrollWidth)
+            make.top.equalTo(UISize.searchFieldHeight)
+        }
+        imgPreview.snp.makeConstraints { (make) in
+            make.left.equalTo(scrollView.snp.right).offset(4)
+            make.right.bottom.equalToSuperview().offset(-6)
+            make.top.equalTo(scrollView).offset(4)
+        }
+        textPreview.snp.makeConstraints { (make) in
+            make.edges.equalTo(imgPreview)
+        }
+        return view
     }()
     
     lazy var textPreview: NSTextField = {
         let txt = NSTextField(frame: .zero)
+        txt.wantsLayer = true
+        txt.layer?.cornerRadius = 4
         txt.layer?.shadowRadius = 4
         txt.layer?.masksToBounds = true
         txt.shadow = NSShadow()
@@ -79,16 +144,16 @@ class ClipboardContentViewController : NSViewController {
     }
     
     private func hideAllPreview(completion:@escaping (()->Void)) {
-//        self.view.setneed
+        //        self.view.setneed
         NSAnimationContext.runAnimationGroup({ (context) in
             context.duration = 0.1
             self.imgPreview.animator().alphaValue = 0
             self.textPreview.animator().alphaValue = 0
             self.clipBoardHistoryTableView.animator().alphaValue = 0
-//            self.view.snp.updateConstraints({ (make) in
-//                make.height.equalTo(54)
-//            })
-//            MainApplication.shared.popoverClip.contentSize = CGSize(width: 360, height: 54)
+            //            self.view.snp.updateConstraints({ (make) in
+            //                make.height.equalTo(54)
+            //            })
+            //            MainApplication.shared.popoverClip.contentSize = CGSize(width: 360, height: 54)
         }, completionHandler: {
             completion()
         })
@@ -118,44 +183,7 @@ class ClipboardContentViewController : NSViewController {
     
     override func loadView() {
         dataSource = History.shared.contentStorage
-        view = NSView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.addConstraint(NSLayoutConstraint(
-//            item: view, attribute: .width, relatedBy: .equal,
-//            toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 360))
-        view.snp.makeConstraints { (make) in
-            make.width.equalTo(360)
-            make.height.equalTo(240)
-        }
-//        view.addConstraint(NSLayoutConstraint(
-//            item: view, attribute: .height, relatedBy: .equal,
-//            toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 240))
-        view.addSubview(searchField)
-        view.addSubview(imgPreview)
-        view.addSubview(textPreview)
-        let scrollView = NSScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.drawsBackground = false
-        scrollView.hasVerticalScroller = true
-        scrollView.documentView = self.clipBoardHistoryTableView
-        view.addSubview(scrollView)
-        searchField.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-            make.height.equalTo(64)
-        }
-        scrollView.snp.makeConstraints { (make) in
-            make.left.bottom.equalToSuperview()
-            make.width.equalTo(180)
-            make.top.equalTo(self.searchField.snp.bottom)
-        }
-        imgPreview.snp.makeConstraints { (make) in
-            make.left.equalTo(scrollView.snp.right)
-            make.right.bottom.equalToSuperview()
-            make.top.equalTo(scrollView)
-        }
-        textPreview.snp.makeConstraints { (make) in
-            make.edges.equalTo(imgPreview).inset(NSEdgeInsetsMake(4, 4, 4, 4))
-        }
+        view = mainView
     }
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -169,11 +197,11 @@ class ClipboardContentViewController : NSViewController {
     }
     
     @objc func onTextChange(note : NSNotification) {
-//        NSLog("Search for %@", searchField.stringValue)
+        NSLog("Search for %@", searchField.stringValue)
         if searchField.stringValue.isEmpty {
             self.dataSource = History.shared.contentStorage
         } else {
-            self.dataSource = self.dataSource.filter { (content) -> Bool in
+            self.dataSource = History.shared.contentStorage.filter { (content) -> Bool in
                 let range = content.previewStr().range(
                     of: searchField.stringValue,
                     options: .caseInsensitive,
@@ -189,6 +217,7 @@ class ClipboardContentViewController : NSViewController {
         if dataSource.count > 0 {
             setPreview(content: self.dataSource[0])
         } else {
+            print("hide all")
             hideAllPreview(completion: {})
         }
     }
@@ -262,21 +291,100 @@ class ClipboardContentViewController : NSViewController {
         case Int(kVK_ANSI_Keypad7): fallthrough
         case Int(kVK_ANSI_Keypad8): fallthrough
         case Int(kVK_ANSI_Keypad9):
-            print("keycode = \(event.keyCode)")
             self.searchField.becomeFirstResponder()
             break
         case Int(kVK_Return):
             let row = clipBoardHistoryTableView.selectedRow
-            print("row = \(row)")
+            //            print("row = \(row)")
             copy(content: self.dataSource[row])
             break
+        default:
+            super.keyDown(with: event)
+        }
+    }
+}
+typealias keyDownOperation = (NSEvent) -> Void
+class ClipBoardTableView: NSTableView {
+    var upArrowAction: keyOperation?
+    var resignAction: keyDownOperation?
+    override func keyDown(with event: NSEvent) {
+        switch Int(event.keyCode) {
+        case Int(kVK_ANSI_A): fallthrough
+        case Int(kVK_ANSI_S): fallthrough
+        case Int(kVK_ANSI_D): fallthrough
+        case Int(kVK_ANSI_F): fallthrough
+        case Int(kVK_ANSI_H): fallthrough
+        case Int(kVK_ANSI_G): fallthrough
+        case Int(kVK_ANSI_Z): fallthrough
+        case Int(kVK_ANSI_X): fallthrough
+        case Int(kVK_ANSI_C): fallthrough
+        case Int(kVK_ANSI_V): fallthrough
+        case Int(kVK_ANSI_B): fallthrough
+        case Int(kVK_ANSI_Q): fallthrough
+        case Int(kVK_ANSI_W): fallthrough
+        case Int(kVK_ANSI_E): fallthrough
+        case Int(kVK_ANSI_R): fallthrough
+        case Int(kVK_ANSI_Y): fallthrough
+        case Int(kVK_ANSI_T): fallthrough
+        case Int(kVK_ANSI_1): fallthrough
+        case Int(kVK_ANSI_2): fallthrough
+        case Int(kVK_ANSI_3): fallthrough
+        case Int(kVK_ANSI_4): fallthrough
+        case Int(kVK_ANSI_6): fallthrough
+        case Int(kVK_ANSI_5): fallthrough
+        case Int(kVK_ANSI_Equal): fallthrough
+        case Int(kVK_ANSI_9): fallthrough
+        case Int(kVK_ANSI_7): fallthrough
+        case Int(kVK_ANSI_Minus): fallthrough
+        case Int(kVK_ANSI_8): fallthrough
+        case Int(kVK_ANSI_0): fallthrough
+        case Int(kVK_ANSI_RightBracket): fallthrough
+        case Int(kVK_ANSI_O): fallthrough
+        case Int(kVK_ANSI_U): fallthrough
+        case Int(kVK_ANSI_LeftBracket): fallthrough
+        case Int(kVK_ANSI_I): fallthrough
+        case Int(kVK_ANSI_P): fallthrough
+        case Int(kVK_ANSI_L): fallthrough
+        case Int(kVK_ANSI_J): fallthrough
+        case Int(kVK_ANSI_Quote): fallthrough
+        case Int(kVK_ANSI_K): fallthrough
+        case Int(kVK_ANSI_Semicolon): fallthrough
+        case Int(kVK_ANSI_Backslash): fallthrough
+        case Int(kVK_ANSI_Comma): fallthrough
+        case Int(kVK_ANSI_Slash): fallthrough
+        case Int(kVK_ANSI_N): fallthrough
+        case Int(kVK_ANSI_M): fallthrough
+        case Int(kVK_ANSI_Period): fallthrough
+        case Int(kVK_ANSI_Grave): fallthrough
+        case Int(kVK_ANSI_KeypadDecimal): fallthrough
+        case Int(kVK_ANSI_KeypadMultiply): fallthrough
+        case Int(kVK_ANSI_KeypadPlus): fallthrough
+        case Int(kVK_ANSI_KeypadClear): fallthrough
+        case Int(kVK_ANSI_KeypadDivide): fallthrough
+        case Int(kVK_ANSI_KeypadEnter): fallthrough
+        case Int(kVK_ANSI_KeypadMinus): fallthrough
+        case Int(kVK_ANSI_KeypadEquals): fallthrough
+        case Int(kVK_ANSI_Keypad0): fallthrough
+        case Int(kVK_ANSI_Keypad1): fallthrough
+        case Int(kVK_ANSI_Keypad2): fallthrough
+        case Int(kVK_ANSI_Keypad3): fallthrough
+        case Int(kVK_ANSI_Keypad4): fallthrough
+        case Int(kVK_ANSI_Keypad5): fallthrough
+        case Int(kVK_ANSI_Keypad6): fallthrough
+        case Int(kVK_ANSI_Keypad7): fallthrough
+        case Int(kVK_ANSI_Keypad8): fallthrough
+        case Int(kVK_ANSI_Keypad9):
+            if resignAction != nil {
+                resignAction!(event)
+            }
+            break
         case Int(kVK_UpArrow):
-            let row = clipBoardHistoryTableView.selectedRow
-            if row == 0 {
-                self.searchField.becomeFirstResponder()
+            if self.selectedRow == 0 && upArrowAction != nil {
+                upArrowAction!()
             } else {
                 super.keyDown(with: event)
             }
+            break
         default:
             super.keyDown(with: event)
         }
@@ -295,12 +403,12 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         var cellToReturn: PopOverCell!
         if let cell = tableView.makeView(withIdentifier: identifier, owner: self) as? PopOverCell {
             cellToReturn = cell
-            cellToReturn.textField?.stringValue = self.dataSource[row].previewStr()
+            cellToReturn.textField?.stringValue = self.dataSource[row].previewStr().humanizedTitle()
         } else {
             cellToReturn = PopOverCell()
             cellToReturn.identifier = identifier
             cellToReturn.textField?.textColor = .white
-            cellToReturn.textField?.stringValue = self.dataSource[row].previewStr()
+            cellToReturn.textField?.stringValue = self.dataSource[row].previewStr().humanizedTitle()
         }
         return cellToReturn
     }
@@ -320,5 +428,17 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         }
         print("copied.")
         MainApplication.shared.closeClipPopover()
+    }
+}
+extension String {
+    func humanizedTitle() -> String {
+        let maxLength = 25
+        let trimmedTitle = self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        if trimmedTitle.count > maxLength {
+            let index = trimmedTitle.index(trimmedTitle.startIndex, offsetBy: maxLength)
+            return "\(trimmedTitle[...index])..."
+        } else {
+            return trimmedTitle
+        }
     }
 }

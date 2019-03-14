@@ -20,7 +20,7 @@ class HistoryMenuItem: NSMenuItem {
         super.init(coder: coder)
     }
     
-    init(content: HistoryContent, clipboard: Clipboard) {
+    init(content: HistoryContent) {
         var title = "[image]"
         if content.contentType == HistoryContentType.string.rawValue {
             title = content.string!
@@ -28,7 +28,7 @@ class HistoryMenuItem: NSMenuItem {
         super.init(title: title, action: #selector(copy(_:)), keyEquivalent: "")
         self.target = self
         self.content = content
-        self.clipboard = clipboard
+//        self.clipboard = clipboard
         self.title = humanizedTitle(title)
     }
     
@@ -45,9 +45,9 @@ class HistoryMenuItem: NSMenuItem {
     @objc
     func copy(_ sender: NSMenuItem) {
         if content!.contentType == HistoryContentType.string.rawValue {
-            clipboard!.copy(content!.string!)
+            Clipboard.shared.copy(content!.string!)
         } else {
-            clipboard!.copy(content!.data!)
+            Clipboard.shared.copy(content!.data!)
         }
     }
 }

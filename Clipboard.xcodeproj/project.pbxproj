@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		593DE89F223A27D000BC39E0 /* PopOverStatusMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */; };
+		593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A2223A348000BC39E0 /* PopOverCell.swift */; };
+		593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */; };
+		593DE8AE223A722D00BC39E0 /* PopoverSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */; };
 		85698B9EC4CB46F818AC0196 /* Pods_Clipboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F175DC9C433BD7A280E17F /* Pods_Clipboard.framework */; };
 		DA0EF1881E444B2A00E58577 /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0EF1871E444B2A00E58577 /* Clipboard.swift */; };
 		DA246D611E56C9EA001E40F3 /* Application.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA246D601E56C9EA001E40F3 /* Application.xib */; };
@@ -65,6 +69,10 @@
 /* Begin PBXFileReference section */
 		24486195A6B025996B9A8638 /* Pods-Maccy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Maccy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Maccy/Pods-Maccy.release.xcconfig"; sourceTree = "<group>"; };
 		53E557A0AB4A09372DB9C529 /* Pods_MaccyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaccyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverStatusMenu.swift; sourceTree = "<group>"; };
+		593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverClipboard.swift; sourceTree = "<group>"; };
+		593DE8A2223A348000BC39E0 /* PopOverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverCell.swift; sourceTree = "<group>"; };
+		593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverSearchField.swift; sourceTree = "<group>"; };
 		6E384E9DB5B6F2F61505B414 /* Pods_Maccy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Maccy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7251DDE4B5AF1572FB8B9599 /* Pods-Clipboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clipboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clipboard/Pods-Clipboard.release.xcconfig"; sourceTree = "<group>"; };
 		8070C4331414C9D54E247DE2 /* Pods-Maccy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Maccy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Maccy/Pods-Maccy.debug.xcconfig"; sourceTree = "<group>"; };
@@ -116,6 +124,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		593DE8A4223A348800BC39E0 /* PopoverWindow */ = {
+			isa = PBXGroup;
+			children = (
+				593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */,
+				593DE8A2223A348000BC39E0 /* PopOverCell.swift */,
+				593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */,
+			);
+			path = PopoverWindow;
+			sourceTree = "<group>";
+		};
+		593DE8A5223A34BD00BC39E0 /* StatusBar */ = {
+			isa = PBXGroup;
+			children = (
+				DA2C75292029FD6B0090965D /* FilterMenuItemView.swift */,
+				DA573EAC1EDD410F00561FB2 /* HistoryMenuItem.swift */,
+				DA2C752B2029FE990090965D /* ClipboardMenu.swift */,
+				593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */,
+			);
+			path = StatusBar;
+			sourceTree = "<group>";
+		};
+		593DE8A6223A34D000BC39E0 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				DAEE38461E3DBEB100DD2966 /* AppDelegate.swift */,
+				DAAEB195219694AE00A7883C /* About.swift */,
+				DA0EF1871E444B2A00E58577 /* Clipboard.swift */,
+				DA6DB59620AA7D55003C255E /* GlobalHotKey.swift */,
+				DAEE38531E3DD6F100DD2966 /* History.swift */,
+				DAF176C5202AA56B00C5FD0D /* Keys.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 		B448BC1DF14922465B623F3B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,16 +205,10 @@
 			children = (
 				DA246D601E56C9EA001E40F3 /* Application.xib */,
 				DA6373971E4AB9BB00263391 /* Assets.xcassets */,
-				DAAEB195219694AE00A7883C /* About.swift */,
-				DAEE38461E3DBEB100DD2966 /* AppDelegate.swift */,
-				DA0EF1871E444B2A00E58577 /* Clipboard.swift */,
-				DA2C75292029FD6B0090965D /* FilterMenuItemView.swift */,
-				DA6DB59620AA7D55003C255E /* GlobalHotKey.swift */,
-				DAEE38531E3DD6F100DD2966 /* History.swift */,
-				DA573EAC1EDD410F00561FB2 /* HistoryMenuItem.swift */,
-				DAF176C5202AA56B00C5FD0D /* Keys.swift */,
-				DA2C752B2029FE990090965D /* ClipboardMenu.swift */,
+				593DE8A6223A34D000BC39E0 /* Tools */,
+				593DE8A5223A34BD00BC39E0 /* StatusBar */,
 				DA8953B81E446A4E00884EAB /* MainApplication.swift */,
+				593DE8A4223A348800BC39E0 /* PopoverWindow */,
 				DAEE384D1E3DBEB100DD2966 /* Info.plist */,
 			);
 			path = Clipboard;
@@ -246,7 +282,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 1000;
-				ORGANIZATIONNAME = p0deje;
+				ORGANIZATIONNAME = Qiming;
 				TargetAttributes = {
 					DA0EE7B5204657830025FC60 = {
 						CreatedOnToolsVersion = 9.2;
@@ -376,11 +412,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA2C752A2029FD6B0090965D /* FilterMenuItemView.swift in Sources */,
+				593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */,
 				DA6DB59720AA7D55003C255E /* GlobalHotKey.swift in Sources */,
 				DAF176C6202AA56B00C5FD0D /* Keys.swift in Sources */,
+				593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */,
 				DAEE38541E3DD6F100DD2966 /* History.swift in Sources */,
+				593DE8AE223A722D00BC39E0 /* PopoverSearchField.swift in Sources */,
 				DA0EF1881E444B2A00E58577 /* Clipboard.swift in Sources */,
 				DAAEB196219694AE00A7883C /* About.swift in Sources */,
+				593DE89F223A27D000BC39E0 /* PopOverStatusMenu.swift in Sources */,
 				DA573EAD1EDD410F00561FB2 /* HistoryMenuItem.swift in Sources */,
 				DA2C752C2029FE990090965D /* ClipboardMenu.swift in Sources */,
 				DA8953B91E446A4E00884EAB /* MainApplication.swift in Sources */,

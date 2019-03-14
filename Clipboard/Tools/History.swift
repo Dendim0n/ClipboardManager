@@ -15,6 +15,17 @@ struct HistoryContent:Codable {
         self.data = data
         self.string = string
     }
+    func previewStr() -> String {
+        if self.contentType == 1 {
+            if let str = self.string {
+                var trimmedString = str.replacingOccurrences(of: "\n", with: "").trimmingCharacters(in: .whitespaces)
+                return trimmedString
+            }
+            return "NONE"
+        } else {
+            return "[image]"
+        }
+    }
 }
 
 extension HistoryContent {
@@ -48,6 +59,7 @@ extension HistoryContent {
 }
 
 class History {
+    static let shared = History()
     private var dataPath:URL {
         get {
             var url = FileManager.default.homeDirectoryForCurrentUser

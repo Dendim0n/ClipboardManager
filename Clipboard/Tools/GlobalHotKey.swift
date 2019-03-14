@@ -1,6 +1,7 @@
 import HotKey
 
 class GlobalHotKey {
+    static let shared = GlobalHotKey()
     var handler: HotKey.Handler? {
         get { return hotKey?.keyDownHandler }
         set(newHandler) { hotKey?.keyDownHandler = newHandler }

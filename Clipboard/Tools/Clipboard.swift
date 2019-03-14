@@ -1,6 +1,7 @@
 import AppKit
 
 class Clipboard {
+    static let shared = Clipboard()
     typealias OnNewCopyHook = (Any) -> Void
     typealias OnRemovedCopyHook = () -> Void
     

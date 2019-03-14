@@ -3,6 +3,10 @@ import Carbon
 import HotKey
 import SnapKit
 
+
+//搜索图片颜色
+
+
 class FilterMenuItemView: NSView, NSTextFieldDelegate {
     @objc
     var title: String {
@@ -94,11 +98,13 @@ class FilterMenuItemView: NSView, NSTextFieldDelegate {
     
     lazy var textPreview: NSTextField = {
         let txt = NSTextField(frame: .zero)
+        txt.layer?.shadowRadius = 4
+        txt.layer?.masksToBounds = true
+        txt.shadow = NSShadow()
         txt.isEditable = false
         txt.isSelectable = false
         return txt
     }()
-    
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)

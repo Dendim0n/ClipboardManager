@@ -14,24 +14,22 @@ class PopOverCell: NSTableCellView {
         super.init(frame: frameRect)
         addSubview(txt)
         txt.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().offset(2)
+            make.right.equalToSuperview().offset(-2)
         }
-//        txt.isBezeled = false
+        txt.isBezeled = false
+        txt.usesSingleLineMode = true
         txt.textColor = .white
         txt.isEditable = false
-        txt.drawsBackground = false
+        txt.drawsBackground = true
+        txt.backgroundColor = .clear
+        txt.font = NSFont.systemFont(ofSize: 12)
         self.textField = txt
-//        txt.stringValue = "abcde"
     }
     
     required init?(coder decoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    override func draw(_ dirtyRect: NSRect) {
-//        super.draw(dirtyRect)
-//
-//        // Drawing code here.
-//    }
     
 }

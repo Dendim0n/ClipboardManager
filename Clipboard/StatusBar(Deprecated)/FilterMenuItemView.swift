@@ -142,33 +142,33 @@ class FilterMenuItemView: NSView, NSTextFieldDelegate {
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        if window != nil {
-            if let dispatcher = GetEventDispatcherTarget() {
-                // Create pointer to our event processer.
-                let eventProcessorPointer = UnsafeMutablePointer<Any>.allocate(capacity: 1)
-                eventProcessorPointer.initialize(to: processInterceptedEvent)
-                
-                let eventHandlerCallback: EventHandlerUPP = { _, eventRef, userData in
-                    guard let event = eventRef else { return noErr }
-                    guard let callbackPointer = userData else { return noErr }
-                    
-                    // Call our event processor from pointer.
-                    let eventProcessPointer = UnsafeMutablePointer<(EventRef) -> (Bool)>(OpaquePointer(callbackPointer))
-                    let eventProcessed = eventProcessPointer.pointee(event)
-                    
-                    if eventProcessed {
-                        return noErr
-                    } else {
-                        return OSStatus(Carbon.eventNotHandledErr)
-                    }
-                }
-                
-                InstallEventHandler(dispatcher, eventHandlerCallback, 2, eventSpecs, eventProcessorPointer, &eventHandler)
-            }
-        } else {
-            RemoveEventHandler(eventHandler)
-            setQuery("")
-        }
+//        if window != nil {
+//            if let dispatcher = GetEventDispatcherTarget() {
+//                // Create pointer to our event processer.
+//                let eventProcessorPointer = UnsafeMutablePointer<Any>.allocate(capacity: 1)
+//                eventProcessorPointer.initialize(to: processInterceptedEvent)
+//
+//                let eventHandlerCallback: EventHandlerUPP = { _, eventRef, userData in
+//                    guard let event = eventRef else { return noErr }
+//                    guard let callbackPointer = userData else { return noErr }
+//
+//                    // Call our event processor from pointer.
+//                    let eventProcessPointer = UnsafeMutablePointer<(EventRef) -> (Bool)>(OpaquePointer(callbackPointer))
+//                    let eventProcessed = eventProcessPointer.pointee(event)
+//
+//                    if eventProcessed {
+//                        return noErr
+//                    } else {
+//                        return OSStatus(Carbon.eventNotHandledErr)
+//                    }
+//                }
+//
+//                InstallEventHandler(dispatcher, eventHandlerCallback, 2, eventSpecs, eventProcessorPointer, &eventHandler)
+//            }
+//        } else {
+//            RemoveEventHandler(eventHandler)
+//            setQuery("")
+//        }
     }
     
     func controlTextDidChange(_ obj: Notification) {
@@ -213,7 +213,7 @@ class FilterMenuItemView: NSView, NSTextFieldDelegate {
     private func updateVisibility() {
         queryField.isHidden = queryField.stringValue.isEmpty
     }
-    
+
     private func processInterceptedEvent(_ eventRef: EventRef) -> Bool {
         let firstResponder = window?.firstResponder
         if firstResponder == queryField || firstResponder == queryField.currentEditor() {

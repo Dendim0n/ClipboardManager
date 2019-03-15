@@ -11,6 +11,13 @@
 		593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A2223A348000BC39E0 /* PopOverCell.swift */; };
 		593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */; };
 		593DE8AE223A722D00BC39E0 /* PopoverSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */; };
+		593DE8B0223B697700BC39E0 /* HistoryContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8AF223B697700BC39E0 /* HistoryContent.swift */; };
+		593DE8B2223B69E000BC39E0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8B1223B69E000BC39E0 /* Constants.swift */; };
+		593DE8B4223B6A4F00BC39E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8B3223B6A4F00BC39E0 /* Extensions.swift */; };
+		593DE8B6223B6A8100BC39E0 /* ClipboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8B5223B6A8100BC39E0 /* ClipboardTableView.swift */; };
+		593DE8B9223B6B7100BC39E0 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8B8223B6B7100BC39E0 /* Settings.swift */; };
+		593DE8BC223B7AA700BC39E0 /* CocurrentArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8BB223B7AA700BC39E0 /* CocurrentArray.swift */; };
+		593DE8C0223B952800BC39E0 /* Help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8BF223B952800BC39E0 /* Help.swift */; };
 		85698B9EC4CB46F818AC0196 /* Pods_Clipboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3F175DC9C433BD7A280E17F /* Pods_Clipboard.framework */; };
 		DA0EF1881E444B2A00E58577 /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0EF1871E444B2A00E58577 /* Clipboard.swift */; };
 		DA246D611E56C9EA001E40F3 /* Application.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA246D601E56C9EA001E40F3 /* Application.xib */; };
@@ -73,6 +80,13 @@
 		593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverClipboard.swift; sourceTree = "<group>"; };
 		593DE8A2223A348000BC39E0 /* PopOverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverCell.swift; sourceTree = "<group>"; };
 		593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverSearchField.swift; sourceTree = "<group>"; };
+		593DE8AF223B697700BC39E0 /* HistoryContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryContent.swift; sourceTree = "<group>"; };
+		593DE8B1223B69E000BC39E0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		593DE8B3223B6A4F00BC39E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		593DE8B5223B6A8100BC39E0 /* ClipboardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardTableView.swift; sourceTree = "<group>"; };
+		593DE8B8223B6B7100BC39E0 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		593DE8BB223B7AA700BC39E0 /* CocurrentArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocurrentArray.swift; sourceTree = "<group>"; };
+		593DE8BF223B952800BC39E0 /* Help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Help.swift; sourceTree = "<group>"; };
 		6E384E9DB5B6F2F61505B414 /* Pods_Maccy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Maccy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7251DDE4B5AF1572FB8B9599 /* Pods-Clipboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clipboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clipboard/Pods-Clipboard.release.xcconfig"; sourceTree = "<group>"; };
 		8070C4331414C9D54E247DE2 /* Pods-Maccy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Maccy.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Maccy/Pods-Maccy.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,13 +142,14 @@
 			isa = PBXGroup;
 			children = (
 				593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */,
+				593DE8B5223B6A8100BC39E0 /* ClipboardTableView.swift */,
 				593DE8A2223A348000BC39E0 /* PopOverCell.swift */,
 				593DE8AD223A722D00BC39E0 /* PopoverSearchField.swift */,
 			);
 			path = PopoverWindow;
 			sourceTree = "<group>";
 		};
-		593DE8A5223A34BD00BC39E0 /* StatusBar */ = {
+		593DE8A5223A34BD00BC39E0 /* StatusBar(Deprecated) */ = {
 			isa = PBXGroup;
 			children = (
 				DA2C75292029FD6B0090965D /* FilterMenuItemView.swift */,
@@ -142,7 +157,7 @@
 				DA2C752B2029FE990090965D /* ClipboardMenu.swift */,
 				593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */,
 			);
-			path = StatusBar;
+			path = "StatusBar(Deprecated)";
 			sourceTree = "<group>";
 		};
 		593DE8A6223A34D000BC39E0 /* Tools */ = {
@@ -150,12 +165,25 @@
 			children = (
 				DAEE38461E3DBEB100DD2966 /* AppDelegate.swift */,
 				DAAEB195219694AE00A7883C /* About.swift */,
+				593DE8BF223B952800BC39E0 /* Help.swift */,
 				DA0EF1871E444B2A00E58577 /* Clipboard.swift */,
 				DA6DB59620AA7D55003C255E /* GlobalHotKey.swift */,
 				DAEE38531E3DD6F100DD2966 /* History.swift */,
+				593DE8AF223B697700BC39E0 /* HistoryContent.swift */,
 				DAF176C5202AA56B00C5FD0D /* Keys.swift */,
+				593DE8B1223B69E000BC39E0 /* Constants.swift */,
+				593DE8B3223B6A4F00BC39E0 /* Extensions.swift */,
+				593DE8BB223B7AA700BC39E0 /* CocurrentArray.swift */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		593DE8B7223B6B5600BC39E0 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				593DE8B8223B6B7100BC39E0 /* Settings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		B448BC1DF14922465B623F3B /* Pods */ = {
@@ -206,8 +234,9 @@
 				DA246D601E56C9EA001E40F3 /* Application.xib */,
 				DA6373971E4AB9BB00263391 /* Assets.xcassets */,
 				593DE8A6223A34D000BC39E0 /* Tools */,
-				593DE8A5223A34BD00BC39E0 /* StatusBar */,
+				593DE8A5223A34BD00BC39E0 /* StatusBar(Deprecated) */,
 				DA8953B81E446A4E00884EAB /* MainApplication.swift */,
+				593DE8B7223B6B5600BC39E0 /* Settings */,
 				593DE8A4223A348800BC39E0 /* PopoverWindow */,
 				DAEE384D1E3DBEB100DD2966 /* Info.plist */,
 			);
@@ -300,8 +329,9 @@
 					};
 					DAEE38421E3DBEB100DD2966 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = DG237PBV6R;
 						LastSwiftMigration = 1000;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -411,20 +441,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				593DE8B6223B6A8100BC39E0 /* ClipboardTableView.swift in Sources */,
 				DA2C752A2029FD6B0090965D /* FilterMenuItemView.swift in Sources */,
 				593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */,
+				593DE8BC223B7AA700BC39E0 /* CocurrentArray.swift in Sources */,
 				DA6DB59720AA7D55003C255E /* GlobalHotKey.swift in Sources */,
 				DAF176C6202AA56B00C5FD0D /* Keys.swift in Sources */,
 				593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */,
 				DAEE38541E3DD6F100DD2966 /* History.swift in Sources */,
 				593DE8AE223A722D00BC39E0 /* PopoverSearchField.swift in Sources */,
+				593DE8B2223B69E000BC39E0 /* Constants.swift in Sources */,
 				DA0EF1881E444B2A00E58577 /* Clipboard.swift in Sources */,
+				593DE8B0223B697700BC39E0 /* HistoryContent.swift in Sources */,
 				DAAEB196219694AE00A7883C /* About.swift in Sources */,
 				593DE89F223A27D000BC39E0 /* PopOverStatusMenu.swift in Sources */,
 				DA573EAD1EDD410F00561FB2 /* HistoryMenuItem.swift in Sources */,
 				DA2C752C2029FE990090965D /* ClipboardMenu.swift in Sources */,
+				593DE8C0223B952800BC39E0 /* Help.swift in Sources */,
+				593DE8B4223B6A4F00BC39E0 /* Extensions.swift in Sources */,
 				DA8953B91E446A4E00884EAB /* MainApplication.swift in Sources */,
 				DAEE38471E3DBEB100DD2966 /* AppDelegate.swift in Sources */,
+				593DE8B9223B6B7100BC39E0 /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,13 +675,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DG237PBV6R;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Clipboard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kimi.Clipboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -660,12 +698,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = DG237PBV6R;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Clipboard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kimi.Clipboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

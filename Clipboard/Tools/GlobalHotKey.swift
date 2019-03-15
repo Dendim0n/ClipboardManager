@@ -1,7 +1,9 @@
 import HotKey
 
 class GlobalHotKey {
+    
     static let shared = GlobalHotKey()
+    
     var handler: HotKey.Handler? {
         get { return hotKey?.keyDownHandler }
         set(newHandler) { hotKey?.keyDownHandler = newHandler }
@@ -17,6 +19,7 @@ class GlobalHotKey {
     }
     
     private func registerHotKey() {
+        
         guard let keybindingString = UserDefaults.standard.string(forKey: hotKeyStore) else {
             return
         }

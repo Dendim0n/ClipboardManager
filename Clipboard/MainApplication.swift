@@ -15,6 +15,7 @@ class MainApplication {
     var window:NSWindow?
     private static let titles = ["=。=","mua!","mua~","嘿嘿嘿",""]
     private let about = About()
+    private let help = Help()
     private lazy var statusItem:NSStatusItem = {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         return item
@@ -25,6 +26,7 @@ class MainApplication {
         let m = NSMenu(title: titleStr)
         m.addItem(clearItem)
         m.addItem(NSMenuItem.separator())
+        m.addItem(helpItem)
         m.addItem(aboutItem)
         m.addItem(NSMenuItem(title: "退出", action: #selector(NSApp.stop), keyEquivalent: "q"))
         return m
@@ -44,6 +46,12 @@ class MainApplication {
         return item
     }
     
+    private var helpItem: NSMenuItem {
+        let item = NSMenuItem(title: "帮助", action: #selector(help.openHelp), keyEquivalent: "")
+        item.target = help
+        return item
+    }
+    
     init() {
         UserDefaults.standard.register(defaults: [showInStatusBar: true])
     }
@@ -59,7 +67,7 @@ class MainApplication {
         refresh()
         
         Clipboard.shared.onNewCopy(History.shared.add)
-        Clipboard.shared.onNewCopy({_ in self.refresh()})
+        Clipboard.shared.onNewCopy({_,_  in self.refresh()})
         Clipboard.shared.onRemovedCopy(History.shared.removeLast)
         Clipboard.shared.onRemovedCopy({ self.refresh() })
         
@@ -77,18 +85,18 @@ class MainApplication {
     }
     
     private func refresh() {
-        let filterItem = rightMenu.item(at: 0)
-        rightMenu.removeAllItems()
-        rightMenu.addItem(filterItem!)
-        populateItems()
-        populateFooter()
+//        let filterItem = rightMenu.item(at: 0)
+//        rightMenu.removeAllItems()
+//        rightMenu.addItem(filterItem!)
+//        populateItems()
+//        populateFooter()
     }
     
-    private func populateItems() {
-        for entry in History.shared.contentStorage {
-            rightMenu.addItem(historyItem(entry))
-        }
-    }
+//    private func populateItems() {
+//        for entry in History.shared.contentStorage {
+//            rightMenu.addItem(historyItem(entry))
+//        }
+//    }
     
     private func populateFooter() {
         rightMenu.addItem(NSMenuItem.separator())
@@ -129,9 +137,10 @@ extension MainApplication { //new popover view controller
     
     func closeClipPopover() {
         popoverClip.close()
+        window?.orderOut(nil)
         if let monitor : AnyObject = clipboardPopoverMonitor {
             NSEvent.removeMonitor(monitor)
-            statusBarPopoverMonitor = nil
+            clipboardPopoverMonitor = nil
         }
         window = nil
     }

@@ -149,9 +149,9 @@ class ClipboardContentViewController : NSViewController {
             make.top.equalTo(self.searchField.snp.bottom)
         }
         imgPreview.snp.makeConstraints { (make) in
-            make.left.equalTo(scrollView.snp.right)
-            make.right.bottom.equalToSuperview()
-            make.top.equalTo(scrollView)
+            make.left.equalTo(scrollView.snp.right).offset(4)
+            make.right.bottom.equalToSuperview().offset(-4)
+            make.top.equalTo(scrollView).offset(4)
         }
         textPreview.snp.makeConstraints { (make) in
             make.edges.equalTo(imgPreview).inset(NSEdgeInsetsMake(4, 4, 4, 4))

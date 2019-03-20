@@ -1,20 +1,26 @@
 PODS:
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - HotKey (0.1.1)
   - SnapKit (4.2.0)
 
 DEPENDENCIES:
+  - FMDB
   - HotKey
   - SnapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - FMDB
     - HotKey
     - SnapKit
 
 SPEC CHECKSUMS:
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   HotKey: 0be143fd015544a63c51be6dc2066dbf455ced72
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
 
-PODFILE CHECKSUM: eaeb75a1aed56b685353aeeb39e774576b1c2b11
+PODFILE CHECKSUM: 1db332a2af303adf5c78c20da9da49c7e26c1e07
 
 COCOAPODS: 1.5.3

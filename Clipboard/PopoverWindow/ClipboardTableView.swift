@@ -14,6 +14,7 @@ class ClipBoardTableView: NSTableView {
     var upArrowAction: keyOperation?
     var resignAction: keyDownOperation?
     var sensitiveAction: keyOperation?
+    var deleteAction: keyOperation?
     override func keyDown(with event: NSEvent) {
         switch Int(event.keyCode) {
         case Int(kVK_ANSI_A): fallthrough
@@ -97,6 +98,13 @@ class ClipBoardTableView: NSTableView {
                 sensitiveAction!()
             }
             break
+        case Int(kVK_ForwardDelete):
+            break
+        case Int(kVK_Delete):
+            if deleteAction != nil {
+                deleteAction!()
+            }
+            break
         default:
             super.keyDown(with: event)
         }
@@ -107,7 +115,11 @@ class HistoryTableRowView: NSTableRowView {
     override func drawSelection(in dirtyRect: NSRect) {
         if self.selectionHighlightStyle != .none {
             let selectionRect = NSInsetRect(self.bounds, 2.5, 2.5)
-            NSColor(calibratedWhite: 0.65, alpha: 1).setStroke()
+            if PopOverCell.lineColor != .clear {
+                PopOverCell.lineColor.setStroke()
+            } else {
+                NSColor(calibratedWhite: 0.65, alpha: 1).setStroke()
+            }
 //            NSColor(calibratedWhite: 0.82, alpha: 1).setFill()
             let selectionPath = NSBezierPath.init(roundedRect: selectionRect, xRadius: 6, yRadius: 6)
             selectionPath.fill()
@@ -115,3 +127,4 @@ class HistoryTableRowView: NSTableRowView {
         }
     }
 }
+

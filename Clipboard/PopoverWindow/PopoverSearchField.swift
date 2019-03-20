@@ -26,7 +26,7 @@ class PopoverSearchField: NSSearchField,NSSearchFieldDelegate {
 //        self.action = #selector(customAction)
     }
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
     }
     
     func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {

@@ -1,23 +1,16 @@
 import AppKit
+import FMDB
 
 class History {
     static let shared = History()
-    private var dataPath:URL {
-        get {
-            var url = FileManager.default.homeDirectoryForCurrentUser
-            url.appendPathComponent("clipBoard.history")
-            return url
-        }
-    }
-    private let contentKey = "historyContent"
-    private let maxSize = 999
-    
-    private let defaults = UserDefaults.standard
+    private let maxSize = 500
     
     var contentStorage = [HistoryContent]() {
         didSet {
-            if oldValue.count != 0 || contentStorage.count == 1{
-                saveToDisk()
+            if let vc = MainApplication.shared.popoverClip.contentViewController as? ClipboardContentViewController {
+                DispatchQueue.main.async {
+                    vc.refresh()
+                }
             }
         }
     }
@@ -25,10 +18,10 @@ class History {
     func add(content: Any, sourceApp:NSRunningApplication?) {
         var item:HistoryContent?
         var contentType = HistoryContentType.string.rawValue
-        var old = [HistoryContent]()
+        var new = [HistoryContent]()
         if content is String {
             print("content is String")
-            old = contentStorage.filter {
+            new = contentStorage.filter {
                 if let str = $0.string {
                     return str != content as! String
                 } else {
@@ -39,7 +32,7 @@ class History {
         if content is Data {
             print("content is Data")
             contentType = HistoryContentType.data.rawValue
-            old = contentStorage.filter {
+            new = contentStorage.filter {
                 if let str = $0.data {
                     return str != content as! Data
                 } else {
@@ -50,33 +43,18 @@ class History {
         let icon = sourceApp?.icon
         let source = sourceApp?.localizedName
         item = HistoryContent(contentType: contentType, data: content as? Data, string: content as? String, icon: icon, sourceApp: source)
-        contentStorage = [item!] + old
+//        for i in 0..<300 {
+//            print("test iteration:\(i)")
+            new.insert(item!, at: 0)
+            HistoryDB.shared.addToDB(content: item!)
+//        }
+        contentStorage = new
     }
-    init() {
-        readFromDisk()
-    }
-    deinit {
-        saveToDisk()
-    }
-    func readFromDisk() {
-        guard let data = UserDefaults.standard.object(forKey: "history") as? [Data] else {
-            self.contentStorage = [HistoryContent]()
-            return
+    func remove(content:HistoryContent) {
+        contentStorage = contentStorage.filter {
+            return content != $0
         }
-        DispatchQueue.global().async {
-            
-            self.contentStorage = data.parallel.compactMap{ return HistoryContent(data: $0)}
-            if let vc = MainApplication.shared.popoverClip.contentViewController as? ClipboardContentViewController {
-                DispatchQueue.main.async {
-                    vc.loading = false
-                    vc.refresh()
-                }
-            }
-        }
-    }
-    func saveToDisk() {
-        let contents = self.contentStorage.parallel.map { $0.encode() }
-        UserDefaults.standard.set(contents, forKey: "history")
+        HistoryDB.shared.delIfExists(content: content)
     }
     
     func removeLast() {
@@ -85,10 +63,11 @@ class History {
             history.removeLast()
             contentStorage = history
         }
+        HistoryDB.shared.removeFirst()
     }
     
     func clear() {
-        UserDefaults.standard.set([], forKey: "history")
-        readFromDisk()
+        self.contentStorage = [HistoryContent]()
+        HistoryDB.shared.removeAll()
     }
 }

@@ -5,5 +5,5 @@ target 'Clipboard' do
 
   pod 'HotKey'
   pod 'SnapKit'
-
+  pod 'FMDB'
 end

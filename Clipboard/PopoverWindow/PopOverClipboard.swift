@@ -88,6 +88,7 @@ class ClipboardContentViewController : NSViewController {
     
     lazy var searchField:PopoverSearchField = {
         var search = PopoverSearchField()
+//        search.wantsLayer = true
         search.cancelAction = {
             MainApplication.shared.closeClipPopover()
         }
@@ -98,12 +99,7 @@ class ClipboardContentViewController : NSViewController {
             }
         }
         search.browseAction = {
-            if self.dataSource.count > 0 {
-                self.view.window?.makeFirstResponder(self.clipBoardHistoryTableView)
-                self.clipBoardHistoryTableView.selectRowIndexes(
-                    IndexSet(arrayLiteral: 0), byExtendingSelection: false)
-                self.setPreview(content: self.dataSource[0])
-            }
+            self.showFirstItem()
         }
         search.sensitiveAction = {
             if self.sensitive == NSString.CompareOptions.caseInsensitive {
@@ -140,6 +136,14 @@ class ClipboardContentViewController : NSViewController {
                 self.sensitive = NSString.CompareOptions.caseInsensitive
             }
         }
+        tv.deleteAction = { //content in
+            if self.searchField.stringValue.count > 0 {
+                self.searchField.stringValue = ""
+                self.view.window?.makeFirstResponder(self.searchField)
+            } else {
+                History.shared.remove(content: self.dataSource[tv.selectedRow])
+            }
+        }
         tv.target = self
         tv.doubleAction = #selector(doubleClick)
         return tv
@@ -153,12 +157,23 @@ class ClipboardContentViewController : NSViewController {
         imgView.alphaValue = 0
         return imgView
     }()
+    
+    lazy var textPreview: NSTextField = {
+        let txt = NSTextField(frame: .zero)
+        txt.wantsLayer = true
+        txt.layer?.cornerRadius = 4
+        txt.layer?.masksToBounds = true
+        txt.isEditable = false
+        txt.isSelectable = false
+        txt.alphaValue = 0
+        return txt
+    }()
 
     lazy var mainView:NSView = {
         let view = NSView()
         //background color?
-        //        view.wantsLayer = true
-        //        view.layer?.backgroundColor = NSColor.systemPink.cgColor
+//        view.wantsLayer = true
+//        view.layer?.backgroundColor = BaseTheme().baseBGColor.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.snp.makeConstraints { (make) in
             make.width.equalTo(PopoverSize.width)
@@ -204,18 +219,7 @@ class ClipboardContentViewController : NSViewController {
         return view
     }()
     
-    lazy var textPreview: NSTextField = {
-        let txt = NSTextField(frame: .zero)
-        txt.wantsLayer = true
-        txt.layer?.cornerRadius = 4
-        txt.layer?.shadowRadius = 4
-        txt.layer?.masksToBounds = true
-        txt.shadow = NSShadow()
-        txt.isEditable = false
-        txt.isSelectable = false
-        txt.alphaValue = 0
-        return txt
-    }()
+    
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -230,13 +234,23 @@ class ClipboardContentViewController : NSViewController {
         //refresh
         dataSource = History.shared.contentStorage
         clipBoardHistoryTableView.reloadData()
+        showFirstItem()
+    }
+    
+    func showFirstItem() {
+        if self.dataSource.count > 0 {
+            self.view.window?.makeFirstResponder(self.clipBoardHistoryTableView)
+            self.clipBoardHistoryTableView.selectRowIndexes(
+                IndexSet(arrayLiteral: 0), byExtendingSelection: false)
+            self.setPreview(content: self.dataSource[0])
+            self.clipBoardHistoryTableView.scrollRowToVisible(0)
+        }
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         searchField.placeholderString = ["=。=","mua!","mua~","嘿嘿嘿"].randomElement()
         refresh()
-        
     }
     
     override func viewDidLoad() {
@@ -268,8 +282,12 @@ extension ClipboardContentViewController {
             setPreview(content: self.dataSource[0])
         } else {
             print("hide all")
-            emptyPrompt.stringValue = "无搜索结果"
-            hideAllPreview(completion: {})
+            if searchField.stringValue.count > 0 {
+                emptyPrompt.stringValue = "无搜索结果"
+            } else {
+                emptyPrompt.stringValue = "无历史记录"
+            }
+            hideAllPreview()
         }
     }
     override func keyDown(with event: NSEvent) {
@@ -365,66 +383,30 @@ extension ClipboardContentViewController {
         }
     }
     
-    private func hideAllPreview(completion:@escaping (()->Void)) {
-        
+    func hideAllPreview() {
         self.imgPreview.alphaValue = 0
         self.textPreview.alphaValue = 0
         self.clipBoardHistoryTableView.alphaValue = 0
-        self.emptyPrompt.alphaValue = 1
-        
-//        NSAnimationContext.runAnimationGroup({ (context) in
-//            context.duration = 0.1
-//            context.allowsImplicitAnimation = true
-//            self.imgPreview.animator().alphaValue = 0
-//            self.textPreview.animator().alphaValue = 0
-//            self.clipBoardHistoryTableView.animator().alphaValue = 0
-//            self.emptyPrompt.animator().alphaValue = 1
-////            self.view.snp.updateConstraints({ (make) in
-////                make.height.equalTo(PopoverSize.searchFieldHeight)
-////            })
-////            self.view.layoutSubtreeIfNeeded()
-////            MainApplication.shared.popoverClip.contentSize = CGSize(width: 360, height: PopoverSize.searchFieldHeight)
-//        }, completionHandler: {
-//            completion()
-//        })
+        self.emptyPrompt.alphaValue = 0.5
     }
     
     private func showPicPreview() {
+        self.textPreview.stringValue = ""
         self.imgPreview.alphaValue = 1
-        self.textPreview.alphaValue = 0
+        self.textPreview.alphaValue = 1
+        view.bringSubviewToFront(self.imgPreview)
         self.clipBoardHistoryTableView.alphaValue = 1
         self.emptyPrompt.alphaValue = 0
-//        NSAnimationContext.runAnimationGroup({ (context) in
-//            context.duration = 0.1
-//            context.allowsImplicitAnimation = true
-//
-////            self.view.snp.updateConstraints({ (make) in
-////                make.height.equalTo(PopoverSize.height)
-////            })
-////            MainApplication.shared.popoverClip.contentSize = CGSize(width: 360, height: PopoverSize.height)
-////            self.view.layoutSubtreeIfNeeded()
-//        }, completionHandler: {
-//
-//        })
     }
     
     private func showTextPreview() {
-        self.imgPreview.alphaValue = 0
+        self.imgPreview.image = nil
+//        return
+        self.imgPreview.alphaValue = 1
         self.textPreview.alphaValue = 1
+        view.bringSubviewToFront(self.textPreview)
         self.clipBoardHistoryTableView.alphaValue = 1
         self.emptyPrompt.alphaValue = 0
-//        NSAnimationContext.runAnimationGroup({ (context) in
-//            context.duration = 0.1
-//            context.allowsImplicitAnimation = true
-//
-////            self.view.snp.updateConstraints({ (make) in
-////                make.height.equalTo(PopoverSize.height)
-////            })
-////            MainApplication.shared.popoverClip.contentSize = CGSize(width: 360, height: PopoverSize.height)
-////            self.view.layoutSubtreeIfNeeded()
-//        }, completionHandler: {
-//
-//        })
     }
 }
 extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSource {
@@ -449,13 +431,10 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         cellToReturn = tableView.makeView(withIdentifier: identifier, owner: self) as? PopOverCell ?? PopOverCell()
         cellToReturn = PopOverCell()
         cellToReturn.identifier = identifier
-//        if loading {
-//            cellToReturn.textField?.stringValue = "[Loading...]"
-//            return cellToReturn
-//        }
         let data = self.dataSource[row]
         cellToReturn.textField?.textColor = .white
         cellToReturn.textField?.stringValue = data.previewStr().humanizedTitle()
+        cellToReturn.colorView.layer?.backgroundColor = data.styleColor()
         cellToReturn.img.image = data.icon
         return cellToReturn
     }
@@ -477,15 +456,31 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         MainApplication.shared.closeClipPopover()
     }
 }
-
+extension ClipboardContentViewController {
+    func setTheme(theme:BaseTheme) {
+        view.wantsLayer = true
+        view.layer?.backgroundColor = theme.baseBGColor.cgColor
+        searchField.layer?.backgroundColor = theme.searchBGColor.cgColor
+        PopOverCell.lineColor = theme.lineColor
+        PopOverCell.bgColor = theme.baseBGColor
+        PopOverCell.textColor = theme.fontColor
+        imgPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
+//        imgPreview.simp
+        textPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
+        textPreview.textColor = theme.baseBGColor
+        emptyPrompt.backgroundColor = theme.baseBGColor
+    }
+}
 class PopOverClipboard: NSPopover {
     override init() {
         super.init()
-        self.contentViewController = ClipboardContentViewController()
+        let controller = ClipboardContentViewController()
+        self.contentViewController = controller
+        controller.setTheme(theme: BaseTheme())
         self.animates = true
         self.appearance = appearance
     }
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return nil
     }
 }

@@ -12,18 +12,49 @@ enum HistoryContentType: Int {
     case data = 0
     case string = 1
 }
-
-struct HistoryContent {
+class Qunarchiver:NSKeyedUnarchiver {
+    deinit {
+        print("unarchiver deinit")
+    }
+}
+class Qarchiver:NSKeyedArchiver {
+    deinit {
+        print("archiver deinit")
+    }
+}
+class HistoryContent {
     var contentType:Int
     var data:Data?
     var string:String?
     var icon:NSImage?
     var sourceApp:String?
+    func iconData() -> Data? {
+        if self.icon != nil {
+            return Data(referencing: NSData(data: icon!.tiffRepresentation!))
+        } else {
+            return nil
+        }
+    }
+    func styleColor() -> CGColor {
+        guard data != nil else {
+            return NSColor.clear.cgColor
+        }
+        return NSImage.init(data: self.data!)!.averageColor!
+    }
     init(contentType: Int, data:Data?, string:String?, icon:NSImage?, sourceApp:String?) {
         self.contentType = contentType
         self.data = data
         self.string = string
         self.icon = icon
+        self.sourceApp = sourceApp
+    }
+    init(contentType: Int, data:Data?, string:String?, iconData:Data?, sourceApp:String?) {
+        self.contentType = contentType
+        self.data = data
+        self.string = string
+        if iconData != nil {
+            self.icon = NSImage.init(data: iconData!)
+        }
         self.sourceApp = sourceApp
     }
     func previewStr() -> String {
@@ -37,44 +68,12 @@ struct HistoryContent {
             return "[image]"
         }
     }
-}
-
-extension HistoryContent {
-    func encode() -> Data {
-        return autoreleasepool { () -> Data in
-            let archiver = NSKeyedArchiver.init(requiringSecureCoding: true)
-            archiver.encode(self.contentType, forKey: "type")
-            if let data = self.data {
-                archiver.encode(NSData(data: data), forKey: "data")
-            }
-            if let icon = self.icon {
-                archiver.encode(NSData(data: icon.tiffRepresentation!), forKey: "icon")
-            }
-            archiver.encode(self.string, forKey: "string")
-            archiver.encode(self.sourceApp, forKey: "sourceApp")
-            archiver.finishEncoding()
-            let data = archiver.encodedData
-            return data
-        }
+    deinit {
+        print("History Deinit");
     }
-    
-    init?(data: Data) {
-        let unarchiver = try? NSKeyedUnarchiver.init(forReadingFrom: data)
-        if unarchiver == nil {
-            return nil
-        }
-        defer {
-            unarchiver!.finishDecoding()
-        }
-        
-        if let data = unarchiver!.decodeObject(forKey: "data") as? NSData {
-            self.data = Data(referencing: data)
-        }
-        if let data = unarchiver!.decodeObject(forKey: "icon") as? NSData {
-            self.icon = NSImage(data: Data(referencing: data))
-        }
-        self.string = unarchiver!.decodeObject(forKey: "string") as? String
-        self.sourceApp = unarchiver!.decodeObject(forKey: "sourceApp") as? String
-        self.contentType = Int(unarchiver!.decodeInteger(forKey: "type"))
+}
+extension HistoryContent:Equatable {
+    public static func == (lhs: HistoryContent, rhs: HistoryContent) -> Bool {
+        return lhs.data == rhs.data && lhs.string == rhs.string
     }
 }

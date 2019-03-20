@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5910A9E5224254680077A2E6 /* ColorThemes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5910A9E4224254680077A2E6 /* ColorThemes.swift */; };
+		59312A04223F998C00BE8EB7 /* HistoryDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59312A03223F998C00BE8EB7 /* HistoryDB.swift */; };
 		593DE89F223A27D000BC39E0 /* PopOverStatusMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */; };
 		593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A2223A348000BC39E0 /* PopOverCell.swift */; };
 		593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */; };
@@ -76,6 +78,8 @@
 /* Begin PBXFileReference section */
 		24486195A6B025996B9A8638 /* Pods-Maccy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Maccy.release.xcconfig"; path = "Pods/Target Support Files/Pods-Maccy/Pods-Maccy.release.xcconfig"; sourceTree = "<group>"; };
 		53E557A0AB4A09372DB9C529 /* Pods_MaccyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MaccyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5910A9E4224254680077A2E6 /* ColorThemes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemes.swift; sourceTree = "<group>"; };
+		59312A03223F998C00BE8EB7 /* HistoryDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDB.swift; sourceTree = "<group>"; };
 		593DE89E223A27D000BC39E0 /* PopOverStatusMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverStatusMenu.swift; sourceTree = "<group>"; };
 		593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverClipboard.swift; sourceTree = "<group>"; };
 		593DE8A2223A348000BC39E0 /* PopOverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverCell.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 		593DE8A4223A348800BC39E0 /* PopoverWindow */ = {
 			isa = PBXGroup;
 			children = (
+				5910A9E4224254680077A2E6 /* ColorThemes.swift */,
 				593DE8A0223A2B4500BC39E0 /* PopOverClipboard.swift */,
 				593DE8B5223B6A8100BC39E0 /* ClipboardTableView.swift */,
 				593DE8A2223A348000BC39E0 /* PopOverCell.swift */,
@@ -169,6 +174,7 @@
 				DA0EF1871E444B2A00E58577 /* Clipboard.swift */,
 				DA6DB59620AA7D55003C255E /* GlobalHotKey.swift */,
 				DAEE38531E3DD6F100DD2966 /* History.swift */,
+				59312A03223F998C00BE8EB7 /* HistoryDB.swift */,
 				593DE8AF223B697700BC39E0 /* HistoryContent.swift */,
 				DAF176C5202AA56B00C5FD0D /* Keys.swift */,
 				593DE8B1223B69E000BC39E0 /* Constants.swift */,
@@ -389,11 +395,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clipboard/Pods-Clipboard-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/HotKey/HotKey.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HotKey.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
@@ -442,9 +450,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				593DE8B6223B6A8100BC39E0 /* ClipboardTableView.swift in Sources */,
+				5910A9E5224254680077A2E6 /* ColorThemes.swift in Sources */,
 				DA2C752A2029FD6B0090965D /* FilterMenuItemView.swift in Sources */,
 				593DE8AC223A690200BC39E0 /* PopOverClipboard.swift in Sources */,
 				593DE8BC223B7AA700BC39E0 /* CocurrentArray.swift in Sources */,
+				59312A04223F998C00BE8EB7 /* HistoryDB.swift in Sources */,
 				DA6DB59720AA7D55003C255E /* GlobalHotKey.swift in Sources */,
 				DAF176C6202AA56B00C5FD0D /* Keys.swift in Sources */,
 				593DE8A3223A348000BC39E0 /* PopOverCell.swift in Sources */,

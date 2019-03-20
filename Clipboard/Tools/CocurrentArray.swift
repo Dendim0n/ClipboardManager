@@ -50,7 +50,8 @@ where Base: Sequence, Element == Base.Iterator.Element {
             resultsStorageQueue.async {
                 workItem.wait()
                 guard let unwrappedResult = result else {
-                    fatalError("The work item was completed, but the result wasn't set!")
+//                    fatalError("The work item was completed, but the result wasn't set!")
+                    return
                 }
                 results.append(unwrappedResult)
                 

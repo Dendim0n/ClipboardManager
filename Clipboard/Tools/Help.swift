@@ -10,7 +10,7 @@ import Cocoa
 class Help {
     
     private let iconCreditsText = "使用帮助\n\n"
-    private let familyCreditsText = "⇧+⌘+C  =  打开面板\n↑/↓/←/→ = 浏览\nESC  =  退出\n ->|  =  切换大小写"
+    private let familyCreditsText = "⇧+⌘+C  =  打开面板\n↑/↓/←/→ = 浏览\nESC  =  退出\n ->|  =  切换大小写\n在列表中+回车 = 复制选择项\n在界面内直接打字即可搜索\n"
     
     @objc
     func openHelp(_ sender: NSMenuItem) {

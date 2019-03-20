@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 
 typealias keyOperation = () -> Void
+typealias keyRemoveOperation = (HistoryContent) -> Void
 typealias keyDownOperation = (NSEvent) -> Void
 typealias OnNewCopyHook = (Any,NSRunningApplication?) -> Void
 typealias OnRemovedCopyHook = () -> Void

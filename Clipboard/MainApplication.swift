@@ -10,7 +10,7 @@ class MainApplication {
         let pop = PopOverClipboard()
         return pop
     }()
-    var statusBarPopoverMonitor: AnyObject?
+    var copyMonitor: AnyObject?
     var clipboardPopoverMonitor: AnyObject?
     var window:NSWindow?
     var runningApplication:NSRunningApplication?
@@ -26,6 +26,9 @@ class MainApplication {
         let titleStr = MainApplication.titles.randomElement()!
         let m = NSMenu(title: titleStr)
         m.addItem(clearItem)
+//        m.addItem(NSMenuItem.separator())
+//        m.addItem(switchDictItem)
+//        m.addItem(switchSensitiveItem)
         m.addItem(NSMenuItem.separator())
         m.addItem(helpItem)
         m.addItem(aboutItem)
@@ -40,6 +43,32 @@ class MainApplication {
         item.target = self
         return item
     }
+    
+//    private var switchDictItem: NSMenuItem {
+//        let item = NSMenuItem(title: "tab键切换词典", action: #selector(switchDict), keyEquivalent: "d")
+//        item.target = self
+//        return item
+//    }
+//
+//    private var switchSensitiveItem: NSMenuItem {
+//        let item = NSMenuItem(title: "tab键切换大小写", action: #selector(switchSensitive), keyEquivalent: "s")
+//        item.target = self
+//        return item
+//    }
+    
+//    @objc private func switchDict() {
+//        UserDefaults.standard.set(true, forKey: "dict")
+//        UserDefaults.standard.set(false, forKey: "sensitive")
+//        switchSensitiveItem.state = NSControl.StateValue(rawValue: 0)
+//        switchDictItem.state = NSControl.StateValue(rawValue: 1)
+//    }
+//    @objc private func switchSensitive() {
+//        UserDefaults.standard.set(true, forKey: "sensitive")
+//        UserDefaults.standard.set(false, forKey: "dict")
+//        switchSensitiveItem.state = NSControl.StateValue(rawValue: 1)
+//        switchDictItem.state = NSControl.StateValue(rawValue: 0)
+//    }
+    
     
     private var aboutItem: NSMenuItem {
         let item = NSMenuItem(title: "关于", action: #selector(about.openAbout), keyEquivalent: "")
@@ -74,6 +103,22 @@ class MainApplication {
         Clipboard.shared.onRemovedCopy({ self.refresh() })
         
         Clipboard.shared.startListening()
+        copyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { (e) in
+            
+            //            print("copy detected.")
+            let cmd = (e.modifierFlags.rawValue & NSEvent.ModifierFlags.deviceIndependentFlagsMask.rawValue) == NSEvent.ModifierFlags.command.rawValue
+            
+            if !cmd {
+                return
+            }
+            
+            if let key = e.charactersIgnoringModifiers {
+                if key.uppercased() == "C" {
+                    print("copy detected")
+                    //                    Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: "treatCopy", userInfo: nil, repeats: false)
+                }
+            }
+            } as AnyObject
     }
     
     //    func popUpRightMouseMenu() {

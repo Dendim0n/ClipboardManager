@@ -15,6 +15,7 @@ class PopoverSearchField: NSSearchField,NSSearchFieldDelegate {
     var cancelAction:keyOperation?
     var browseAction:keyOperation?
     var sensitiveAction:keyOperation?
+    var dictAction:keyOperation?
     init() {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +44,15 @@ class PopoverSearchField: NSSearchField,NSSearchFieldDelegate {
         if commandSelector == #selector(insertTab(_:)) {
             switchSensitive()
         }
+        if commandSelector.description == "noop:" {
+            print("noop:")
+            if self.dictAction != nil {
+                self.dictAction!()
+            }
+        }
+//        if commandSelector == #selector(noop:) {
+//            print("emmm")
+//        }
         return false
     }
 //    override func insertTab(_ sender: Any?) {

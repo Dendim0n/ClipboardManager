@@ -11,7 +11,13 @@ import SnapKit
 import Carbon
 
 class ClipboardContentViewController : NSViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     var loading = true {
         didSet {
             if !loading {
@@ -60,6 +66,7 @@ class ClipboardContentViewController : NSViewController {
     lazy var sensitivePrompt:NSTextField = {
         let txt = NSTextField()
         txt.alphaValue = 0.5
+//        txt.alphaValue = 0
         txt.isBezeled = false
         txt.usesSingleLineMode = true
         txt.textColor = self.sensitiveColor
@@ -76,7 +83,7 @@ class ClipboardContentViewController : NSViewController {
         txt.alphaValue = 0.5
         txt.isBezeled = false
         txt.usesSingleLineMode = true
-        txt.textColor = .white
+        txt.textColor = NSColor(hexString: "FF8984")
         txt.isEditable = false
         txt.drawsBackground = true
         txt.backgroundColor = .clear
@@ -89,6 +96,8 @@ class ClipboardContentViewController : NSViewController {
     lazy var searchField:PopoverSearchField = {
         var search = PopoverSearchField()
 //        search.wantsLayer = true
+//        search.plac
+        search.textColor = NSColor(hexString: "FF8984")
         search.cancelAction = {
             MainApplication.shared.closeClipPopover()
         }
@@ -108,6 +117,7 @@ class ClipboardContentViewController : NSViewController {
                 self.sensitive = NSString.CompareOptions.caseInsensitive
             }
         }
+        search.dictAction = dict
         return search
     }()
     
@@ -129,7 +139,7 @@ class ClipboardContentViewController : NSViewController {
             }
             self.view.window?.makeFirstResponder(self.searchField)
         }
-        tv.sensitiveAction = {
+        tv.tabAction = {
             if self.sensitive == NSString.CompareOptions.caseInsensitive {
                 self.sensitive = NSString.CompareOptions.backwards
             } else {
@@ -155,25 +165,37 @@ class ClipboardContentViewController : NSViewController {
         imgView.wantsLayer = true
         imgView.layer?.cornerRadius = 4
         imgView.alphaValue = 0
+//        imgView.layer?.backgroundColor = PinkTheme.baseBGColor.cgColor
         return imgView
     }()
     
-    lazy var textPreview: NSTextField = {
-        let txt = NSTextField(frame: .zero)
+    lazy var textPreview: NSTextView = {
+        
+        let txt = NSTextView(frame: .zero)
         txt.wantsLayer = true
         txt.layer?.cornerRadius = 4
         txt.layer?.masksToBounds = true
         txt.isEditable = false
         txt.isSelectable = false
         txt.alphaValue = 0
+        txt.textColor = .white
+//        txt.textColor = PinkTheme.fontColor
+//        txt.backgroundColor = PinkTheme.baseBGColor
+        
+//        let scrollView = NSScrollView()
+//        scrollView.backgroundColor = .clear
+//        scrollView.drawsBackground = false
+//        scrollView.hasVerticalScroller = true
+//        scrollView.documentView = txt
+//        txt.snp.makeConstraints({ (make) in
+//            make.width.equalTo(scrollView.contentSize.width)
+//            make.height.equalTo(scrollView.contentSize.height)
+//        })
         return txt
     }()
 
-    lazy var mainView:NSView = {
-        let view = NSView()
-        //background color?
-//        view.wantsLayer = true
-//        view.layer?.backgroundColor = BaseTheme().baseBGColor.cgColor
+    lazy var mainView:PopoverRootView = {
+        let view = PopoverRootView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.snp.makeConstraints { (make) in
             make.width.equalTo(PopoverSize.width)
@@ -249,7 +271,7 @@ class ClipboardContentViewController : NSViewController {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        searchField.placeholderString = ["=。=","mua!","mua~","嘿嘿嘿"].randomElement()
+        searchField.placeholderAttributedString = ["=。=","mua!","mua~","嘿嘿嘿"].randomElement()!.attributeString(using: NSColor(hexString: "FF8984"))
         refresh()
     }
     
@@ -378,7 +400,7 @@ extension ClipboardContentViewController {
             self.imgPreview.image = NSImage.init(data: content.data!)
             showPicPreview()
         } else {
-            self.textPreview.stringValue = content.string!
+            self.textPreview.string = content.string!
             self.showTextPreview()
         }
     }
@@ -391,7 +413,7 @@ extension ClipboardContentViewController {
     }
     
     private func showPicPreview() {
-        self.textPreview.stringValue = ""
+        self.textPreview.string = ""
         self.imgPreview.alphaValue = 1
         self.textPreview.alphaValue = 1
         view.bringSubviewToFront(self.imgPreview)
@@ -401,7 +423,6 @@ extension ClipboardContentViewController {
     
     private func showTextPreview() {
         self.imgPreview.image = nil
-//        return
         self.imgPreview.alphaValue = 1
         self.textPreview.alphaValue = 1
         view.bringSubviewToFront(self.textPreview)
@@ -415,11 +436,12 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         return HistoryTableRowView()
     }
     func numberOfRows(in tableView: NSTableView) -> Int {
+        var count = 0
         if let source = self.dataSource {
-            return source.count
-        } else {
-            return 0
+            count = source.count
         }
+        return count
+        
     }
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         return 24
@@ -428,8 +450,12 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
         
         let identifier = NSUserInterfaceItemIdentifier(rawValue: "HistoryCell")
         var cellToReturn: PopOverCell!
-        cellToReturn = tableView.makeView(withIdentifier: identifier, owner: self) as? PopOverCell ?? PopOverCell()
-        cellToReturn = PopOverCell()
+        cellToReturn = tableView.makeView(withIdentifier: identifier, owner: self) as? PopOverCell
+        if cellToReturn == nil {
+            cellToReturn = PopOverCell()
+            cellToReturn.identifier = identifier
+            print("create.\(row)")
+        }
         cellToReturn.identifier = identifier
         let data = self.dataSource[row]
         cellToReturn.textField?.textColor = .white
@@ -457,18 +483,47 @@ extension ClipboardContentViewController: NSTableViewDelegate, NSTableViewDataSo
     }
 }
 extension ClipboardContentViewController {
-    func setTheme(theme:BaseTheme) {
-        view.wantsLayer = true
-        view.layer?.backgroundColor = theme.baseBGColor.cgColor
-        searchField.layer?.backgroundColor = theme.searchBGColor.cgColor
-        PopOverCell.lineColor = theme.lineColor
-        PopOverCell.bgColor = theme.baseBGColor
-        PopOverCell.textColor = theme.fontColor
-        imgPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
-//        imgPreview.simp
-        textPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
-        textPreview.textColor = theme.baseBGColor
-        emptyPrompt.backgroundColor = theme.baseBGColor
+    func setTheme() {
+//        view.wantsLayer = true
+//        view.layer?.backgroundColor = theme.baseBGColor.cgColor
+//        searchField.layer?.backgroundColor = theme.searchBGColor.cgColor
+//        PopOverCell.lineColor = theme.lineColor
+//        PopOverCell.bgColor = theme.baseBGColor
+//        PopOverCell.textColor = theme.fontColor
+//        imgPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
+////        imgPreview.simp
+//        textPreview.layer?.backgroundColor = theme.previewBGColor.cgColor
+//        textPreview.textColor = theme.baseBGColor
+//        emptyPrompt.backgroundColor = theme.baseBGColor
+    }
+    func dict() {
+        let urlString = "https://dict.youdao.com/suggest?q=\(self.searchField.stringValue)&le=eng&num=5&ver=&doctype=json&keyfrom=&model=&mid=&imei=&vendor=&screen=&ssid=&abtest="
+        let session = URLSession.shared
+        let req = URLRequest(url: URL.init(string: urlString)!)
+        let task = session.dataTask(with: req) { (data, resp, err) in
+            if err != nil {
+                return
+            }
+            do {
+                let obj = try JSONSerialization.jsonObject(with: data!, options: .allowFragments)
+                print(obj)
+                let entries = ((obj as! Dictionary<String,Any>)["data"] as! Dictionary<String,Any>)["entries"] as! Array<Dictionary<String,String>>
+                print(entries)
+                var result = ""
+                for i in 0..<entries.count {
+                    let entry = entries[i]["entry"]
+                    let explain = entries[i]["explain"]
+                    result += "\(i + 1).\(entry!)\n\(explain!)\n"
+                }
+                DispatchQueue.main.async {
+                    self.textPreview.string = result
+                    self.showTextPreview()
+                }
+            } catch {
+                print("json decode err.")
+            }
+        }
+        task.resume()
     }
 }
 class PopOverClipboard: NSPopover {
@@ -476,11 +531,25 @@ class PopOverClipboard: NSPopover {
         super.init()
         let controller = ClipboardContentViewController()
         self.contentViewController = controller
-        controller.setTheme(theme: BaseTheme())
         self.animates = true
         self.appearance = appearance
     }
     required init?(coder: NSCoder) {
         return nil
+    }
+}
+class PopoverRootView : NSView {
+    override func viewDidMoveToWindow() {
+        let aFrameView = self.window?.contentView?.superview
+        let aBGView = PopoverBackgroundView.init(frame: (aFrameView?.bounds)!)
+        aBGView.autoresizingMask = [.width, .height]
+        aFrameView?.addSubview(aBGView, positioned: .below, relativeTo: aFrameView)
+        super.viewDidMoveToWindow()
+    }
+}
+class PopoverBackgroundView : NSView {
+    override func draw(_ dirtyRect: NSRect) {
+//        PinkTheme.baseBGColor.set()
+//        __NSRectFill(self.bounds)
     }
 }

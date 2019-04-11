@@ -9,9 +9,9 @@
 import Cocoa
 
 class PopOverCell: NSTableCellView {
-    static var lineColor = NSColor.clear
+    static var lineColor = NSColor.white
     static var bgColor = NSColor.clear
-    static var textColor = NSColor.darkGray
+    static var textColor = NSColor.white
     var txt = NSTextField()
     var img = NSImageView()
     var colorView = NSView()

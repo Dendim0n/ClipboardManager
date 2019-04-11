@@ -13,7 +13,7 @@ import Carbon
 class ClipBoardTableView: NSTableView {
     var upArrowAction: keyOperation?
     var resignAction: keyDownOperation?
-    var sensitiveAction: keyOperation?
+    var tabAction: keyOperation?
     var deleteAction: keyOperation?
     override func keyDown(with event: NSEvent) {
         switch Int(event.keyCode) {
@@ -94,8 +94,8 @@ class ClipBoardTableView: NSTableView {
             }
             break
         case Int(kVK_Tab):
-            if sensitiveAction != nil {
-                sensitiveAction!()
+            if tabAction != nil {
+                tabAction!()
             }
             break
         case Int(kVK_ForwardDelete):
@@ -115,11 +115,13 @@ class HistoryTableRowView: NSTableRowView {
     override func drawSelection(in dirtyRect: NSRect) {
         if self.selectionHighlightStyle != .none {
             let selectionRect = NSInsetRect(self.bounds, 2.5, 2.5)
-            if PopOverCell.lineColor != .clear {
-                PopOverCell.lineColor.setStroke()
-            } else {
-                NSColor(calibratedWhite: 0.65, alpha: 1).setStroke()
-            }
+//            if PopOverCell.lineColor != .clear {
+//                PopOverCell.lineColor.setStroke()
+//
+//            } else {
+                NSColor(hexString: "FF8984").setStroke()
+//                NSColor(calibratedWhite: 0.65, alpha: 1).setStroke()
+//            }
 //            NSColor(calibratedWhite: 0.82, alpha: 1).setFill()
             let selectionPath = NSBezierPath.init(roundedRect: selectionRect, xRadius: 6, yRadius: 6)
             selectionPath.fill()

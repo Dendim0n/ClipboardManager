@@ -9,20 +9,20 @@ class GlobalHotKey {
         set(newHandler) { hotKey?.keyDownHandler = newHandler }
     }
     
-    private let hotKeyStore = "hotKey"
-    private let defaultKeyBinding = "command+shift+c"
+//    private let hotKeyStore = "hotKey"
+    private let keybindingString = "command+shift+c"
     private var hotKey: HotKey?
     
     init() {
-        UserDefaults.standard.register(defaults: [hotKeyStore: defaultKeyBinding])
+//        UserDefaults.standard.register(defaults: [hotKeyStore: defaultKeyBinding])
         registerHotKey()
     }
     
     private func registerHotKey() {
         
-        guard let keybindingString = UserDefaults.standard.string(forKey: hotKeyStore) else {
-            return
-        }
+//        guard let keybindingString = UserDefaults.standard.string(forKey: hotKeyStore) else {
+//            return
+//        }
         var keysList = keybindingString.split(separator: "+")
         
         guard let keyString = keysList.popLast() else {

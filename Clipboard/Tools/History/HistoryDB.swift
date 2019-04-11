@@ -20,7 +20,7 @@ class HistoryDB {
     }
     init() {
         threadSafeDB { (db) in
-            try? db.executeUpdate("CREATE TABLE IF NOT EXISTS `History` (`type` INTEGER,`data`    BLOB,`string` TEXT,`source` TEXT,`icon` BLOB);", values: nil)
+            try? db.executeUpdate("CREATE TABLE IF NOT EXISTS `History` (`type` INTEGER,`data` BLOB,`string` TEXT,`source` TEXT,`icon` BLOB);", values: nil)
         }
     }
     func threadSafeDB(block:(FMDatabase) -> Void) {

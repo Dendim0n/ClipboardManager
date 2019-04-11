@@ -7,20 +7,18 @@
 //
 
 import AppKit
-
-class BaseTheme {
-    let baseBGColor = NSColor(hexString: "96C1C3")
-    let lineColor = NSColor(hexString:"96C1C3")
-    let searchBGColor = NSColor(hexString:"C3DAF9")
-    let previewBGColor = NSColor(hexString:"FEF0C1")
-    let fontColor = NSColor(hexString: "FCB6D2")
-    let selectedBGColor = NSColor(hexString:"C59CD0")
+struct ClearTheme {
+    static let baseBGColor = NSColor.clear
+    static let lineColor = NSColor.clear
+    static let fontColor = NSColor.clear
 }
-//class PinkTheme:BaseTheme {
-//    let baseBGColor = NSColor(hexString: "11454F")
-//    let lineColor = NSColor(hexString:"204E5F")
-//    let searchBGColor = NSColor(hexString:"B5D4DE")
-//    let previewBGColor = NSColor(hexString:"CCCCCC")
-//    let fontColor = NSColor(hexString: "204E5F")
-//    let selectedBGColor = NSColor(hexString:"B5D4DE")
-//}
+struct BaseTheme {
+    static let baseBGColor = NSColor(hexString: "204E5F")
+    static let lineColor = NSColor(hexString:"B7D7D8")
+    static let fontColor = NSColor(hexString: "EDF7F5")
+}
+struct PinkTheme {
+    static let baseBGColor = NSColor(hexString: "FFC6A8")
+    static let lineColor = NSColor(hexString:"204E5F")
+    static let fontColor = NSColor(hexString: "204E5F")
+}

@@ -87,3 +87,9 @@ extension NSView {
     }
     
 }
+extension String {
+    func attributeString(using color:NSColor) -> NSAttributedString {
+        let attrs = [NSAttributedString.Key.foregroundColor: color]
+        return NSAttributedString(string: self, attributes: attrs)
+    }
+}

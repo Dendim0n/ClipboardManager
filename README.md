@@ -4,6 +4,7 @@
 ##TODO:
 * memory usage
 * cpu usage
+* attribute text in preview
 
 ## License
 

@@ -1,9 +1,9 @@
-#Clipboard Manager
+# Clipboard Manager
 * string / image supported
 
-##TODO:
+## TODO:
 * memory usage
-* cpu usage
+* cpu usage, now just high cpu usage while starting.
 * attribute text in preview
 
 ## License
